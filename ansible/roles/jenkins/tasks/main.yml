@@ -1,0 +1,23 @@
+---
+- name: install java-default
+  package:
+    name: default-jre
+    state: present
+- name: download war file
+  get_url:
+    url: http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+    dest: /usr/local/etc
+
+- name: Deploy jenkins service
+  template:
+    src: jenkins.service
+    dest: /etc/systemd/system/jenkins.service
+  notify:
+    - Restart jenskins system service
+- name: Flush Handlers
+  meta: flush_handlers
+
+- name: Wait until the password is present
+  wait_for:
+    path: /root/.jenkins/secrets/initialAdminPassword
+# tasks file for roles/jenkins

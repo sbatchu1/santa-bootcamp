@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+    stages {
+        stage('ping') {
+            steps {
+                sh 'cd upesabhi/ansible && ansible all -m ping'
+            }
+        }
+        stage('playbook') {
+            steps {
+                sh 'cd upesabhi/ansible && ansible-playbook *.yml -b'
+            }
+        }
+    }
+}

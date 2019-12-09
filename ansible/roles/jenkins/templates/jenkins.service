@@ -1,0 +1,10 @@
+[Unit]
+Description=Jenkins Daemon
+
+[Service]
+ExecStart=/usr/bin/java -jar /usr/local/etc/jenkins.war
+
+[Install]
+WantedBy=multi-user.target
+
+#use new handler
