@@ -11,3 +11,8 @@ provider "aws" {
   region  = "ap-south-1"
   profile = "ShellPowerUser"
 }
+
+module "vpc" {
+  source = "./vpc"
+  # var.ami = "ami-0acff51c40957b3c4"
+}

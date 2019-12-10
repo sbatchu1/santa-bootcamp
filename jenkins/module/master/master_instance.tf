@@ -15,6 +15,11 @@ resource "aws_security_group" "sg_jenkins" {
   name        = "sg2"
   description = "Allows all traffic"
 
+  tags = {
+    Name = "Santa-Jenkins-SG"
+    Owner = "Santa"
+  }
+
   # SSH
   ingress {
     from_port = 22

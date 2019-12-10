@@ -1,1 +1,39 @@
-add your script here
+REPOSITORY_ADDRESS = ''
+CONTAINER_IMAGE = 'santa-fleet-webapp'
+ACCOUNT_ID = '580572941932'
+pipeline {
+   agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh "\$(aws ecr get-login --no-include-email --region ap-south-1 --registry-ids $ACCOUNT_ID)"
+            }
+        }
+
+        stage('Docker Build Webapp') {
+            steps {
+                sh "docker pull $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest || true"
+                sh "docker build\
+                --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+                --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+                --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:`git rev-parse HEAD` ."
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest"
+                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:`git rev-parse HEAD`"
+            }
+        }
+
+        stage('Deploy Webapp') {
+            steps {
+                sh """
+                    kubectl apply --filename k8s/
+                """
+            }
+        }
+    }
+}
