@@ -1,7 +1,3 @@
-provider "aws" {
-    region="ap-south-1"
-    profile = "ShellPowerUser" 
-}
 resource "aws_vpc" "vpc" {
   cidr_block = "${var.cidr_vpc}"
   enable_dns_support   = true

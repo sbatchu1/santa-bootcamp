@@ -4,6 +4,7 @@ resource "aws_instance" "pt_master_module" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = ["${aws_security_group.sg_jenkins.id}"]
   # aws_security_group = "${aws_security_group.sg_jenkins.name}"
+  iam_instance_profile = "${aws_iam_instance_profile.test_profile.name}"
   key_name = "master-key"
   tags = {
     Name = "Jenkins Master_Santa"
@@ -73,4 +74,9 @@ resource "aws_security_group" "sg_jenkins" {
 
 output "instance_id" {
   value = "${aws_instance.pt_master_module.id}"
+}
+
+resource "aws_iam_instance_profile" "test_profile" {
+  name = "santa_profile"
+  role = "ShellPowerUser"
 }
