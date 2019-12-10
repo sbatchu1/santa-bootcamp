@@ -1,3 +1,3 @@
-bucket = "seep-s3-terraform"
-region = "eu-west-1"
+bucket = "santa-s3-bucket"
+region = "ap-south-1"
 encrypt = true
