@@ -1,4 +1,4 @@
-REPOSITORY_ADDRESS = ''
+REPOSITORY_ADDRESS = '580572941932.dkr.ecr.ap-south-1.amazonaws.com/santa'
 CONTAINER_IMAGE = 'santa-fleet-webapp'
 ACCOUNT_ID = '580572941932'
 pipeline {
