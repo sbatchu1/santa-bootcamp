@@ -19,7 +19,7 @@ variable "ami" {
 }
 module "pt_master_module" {
   source = "./module/master"
-  # var.ami = "ami-0ca4ee4403ecb3a4e"
+  # var.ami = "ami-0acff51c40957b3c4"
 }
 
 # module "pt_node_module" {

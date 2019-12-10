@@ -34,7 +34,8 @@
             "unzip terraform_0.12.17_linux_amd64.zip",
             "sudo mv terraform /usr/local/bin/",
             "terraform --version",
-            "sudo apt-get install git -y"
+            "sudo apt-get install git -y",
+            "sudo apt-get install awscli -y"
 
 
         ]
