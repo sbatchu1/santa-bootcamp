@@ -12,7 +12,11 @@
     "source_ami": "ami-0123b531fc646552f",
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
-    "ami_name": "jenkins-santa-dryrun"
+    "ami_name": "jenkins-santa-dryrun",
+    "tags":{
+      "Name": "santa-jenkins-image",
+      "OS": "ubuntu"
+  }
   }],
   "provisioners":[
     {
@@ -29,7 +33,9 @@
             "wget https://releases.hashicorp.com/terraform/0.12.17/terraform_0.12.17_linux_amd64.zip",
             "unzip terraform_0.12.17_linux_amd64.zip",
             "sudo mv terraform /usr/local/bin/",
-            "terraform --version"
+            "terraform --version",
+            "sudo apt-get install git -y"
+
 
         ]
     },
