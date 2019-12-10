@@ -13,9 +13,9 @@ provider "aws" {
 }
 
 variable "ami" {
-  type        = string
-  default     = "ami_ID"
-  description = "ami_ID"
+  type        = "string"
+  default     = "ami-0acff51c40957b3c4"
+  description = "santa-jenkins-image id"
 }
 module "pt_master_module" {
   source = "./module/master"

@@ -1,6 +1,6 @@
 
 resource "aws_instance" "pt_master_module" {
-  ami                    = "ami-03ea53d04854b1927"
+  ami                    =  "ami-0acff51c40957b3c4"
   instance_type          = "t2.micro"
   vpc_security_group_ids = ["${aws_security_group.sg_jenkins.id}"]
   # aws_security_group = "${aws_security_group.sg_jenkins.name}"
