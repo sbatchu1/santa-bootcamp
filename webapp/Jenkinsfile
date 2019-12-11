@@ -19,7 +19,6 @@ pipeline {
       stage('Prepare') {
          steps {
              dir('webapp'){
-                sh '$(pip3 install awscli --upgrade)'
                 sh '$(aws ecr get-login --no-include-email --region ap-south-1)'
              }
            
