@@ -11,6 +11,7 @@ pipeline {
 
      REPOSITORY_ADDRESS = '580572941932.dkr.ecr.ap-south-1.amazonaws.com'
      CONTAINER_IMAGE = 'santa/webapp'
+     K8S_NAME="Lan-EKS"
    }
 
    stages {
@@ -47,7 +48,10 @@ pipeline {
 
       stage('Deploy to Cluster') {
           steps {
-            sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
+            dir('webapp'){
+                sh "aws eks --region ap-south-1 update-kubeconfig --name $K8S_NAME"
+                sh 'envsubst < deploy.yaml | kubectl apply -f -'
+            }
           }
       }
    }
