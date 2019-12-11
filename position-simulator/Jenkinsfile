@@ -3,35 +3,56 @@ pipeline {
 
    environment {
      // You must set the following environment variables
-     // ORGANIZATION_NAME
+     ORGANIZATION_NAME="sbatchu1/santa-bootcamp"
      // YOUR_DOCKERHUB_USERNAME (it doesn't matter if you don't have one)
      
-     SERVICE_NAME = "fleetman-position-simulator"
-     REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
+    //  SERVICE_NAME = "webapp"
+    //  REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
+   
+     REPOSITORY_ADDRESS = '580572941932.dkr.ecr.ap-south-1.amazonaws.com'
+     CONTAINER_IMAGE = 'santa/position-simulator'
+     K8S_NAME="santa-eks-u7Gvgv9k"
    }
 
    stages {
-      stage('Preparation') {
+
+      stage('Prepare') {
          steps {
-            cleanWs()
-            git credentialsId: 'GitHub', url: "https://github.com/${ORGANIZATION_NAME}/${SERVICE_NAME}"
-         }
-      }
-      stage('Build') {
-         steps {
-            sh '''mvn clean package'''
+             cleanWs()
+             dir('webapp'){
+                sh '$(aws ecr get-login --no-include-email --region ap-south-1)'
+             }
+           
          }
       }
 
-      stage('Build and Push Image') {
+      stage('Build Image') {
          steps {
-           sh 'docker image build -t ${REPOSITORY_TAG} .'
+             dir('webapp'){
+                sh "docker build\
+                    --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+                    --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+                    --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:${BUILD_ID} ."
+                }
          }
       }
+
+    stage('Publish') {
+        steps {
+            dir('webapp'){
+                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest"
+                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:${BUILD_ID}"
+            }
+        }
+    }
+      
 
       stage('Deploy to Cluster') {
           steps {
-                    sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
+            dir('webapp'){
+                sh "aws eks --region ap-south-1 update-kubeconfig --name $K8S_NAME"
+                sh 'kubectl apply -f deploy.yaml'
+            }
           }
       }
    }
