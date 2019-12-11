@@ -18,6 +18,7 @@ pipeline {
       stage('Prepare') {
          steps {
              dir('webapp'){
+                sh '$(aws sts assume-role --role-arn arn:aws:iam::580572941932:role/ShellPowerUser --role-session-name jenkins-session)'
                 sh '$(aws ecr get-login --no-include-email --region ap-south-1)'
              }
            
