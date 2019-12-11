@@ -1,4 +1,4 @@
-
+# defining attributes for Jenkins server
 resource "aws_instance" "pt_master_module" {
   ami                    =  "ami-0acff51c40957b3c4"
   instance_type          = "t2.micro"
@@ -10,7 +10,7 @@ resource "aws_instance" "pt_master_module" {
     Name = "Jenkins Master_Santa"
   }
 }
-
+# defininf SG
 resource "aws_security_group" "sg_jenkins" {
   name        = "sg2"
   description = "Allows all traffic"
@@ -80,7 +80,7 @@ resource "aws_security_group" "sg_jenkins" {
 output "instance_id" {
   value = "${aws_instance.pt_master_module.id}"
 }
-
+# defining user profile for the server
 resource "aws_iam_instance_profile" "test_profile" {
   name = "santa_profile"
   role = "ShellPowerUser"
