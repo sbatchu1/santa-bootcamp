@@ -205,6 +205,11 @@ variable "map_roles" {
       username = "upesabhi"
       groups   = ["system:masters"]
     },
+    {
+      rolearn  = "arn:aws:iam::580572941932:role/SantaPowerUser"
+      username = "upesabhi"
+      groups   = ["system:masters"]
+    },
   ]
 }
 
