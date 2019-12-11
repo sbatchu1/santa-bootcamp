@@ -19,6 +19,7 @@ pipeline {
       stage('Prepare') {
          steps {
              dir('webapp'){
+                sh '$(pip3 install --upgrade --user awscli)'
                 sh '$(aws ecr get-login --no-include-email --region ap-south-1)'
              }
            
@@ -50,7 +51,7 @@ pipeline {
           steps {
             dir('webapp'){
                 sh "aws eks --region ap-south-1 update-kubeconfig --name $K8S_NAME"
-                sh 'envsubst < deploy.yaml | kubectl apply -f -'
+                sh 'kubectl apply -f deploy.yaml'
             }
           }
       }
