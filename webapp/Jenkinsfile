@@ -11,13 +11,14 @@ pipeline {
 
      REPOSITORY_ADDRESS = '580572941932.dkr.ecr.ap-south-1.amazonaws.com'
      CONTAINER_IMAGE = 'santa/webapp'
-     K8S_NAME="Lan-EKS"
+     K8S_NAME="santa-eks-u7Gvgv9k"
    }
 
    stages {
 
       stage('Prepare') {
          steps {
+             cleanWs()
              dir('webapp'){
                 sh '$(aws ecr get-login --no-include-email --region ap-south-1)'
              }
