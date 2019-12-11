@@ -18,7 +18,6 @@ pipeline {
 
       stage('Prepare') {
          steps {
-             cleanWs()
              dir('webapp'){
                 sh '$(aws ecr get-login --no-include-email --region ap-south-1)'
              }
