@@ -27,10 +27,12 @@ pipeline {
 
       stage('Build Image') {
          steps {
-           sh "docker build\
-              --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
-              --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
-              --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:${BUILD_ID} ."
+             dir('webapp'){
+                sh "docker build\
+                    --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+                    --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+                    --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:${BUILD_ID} ."
+                }
          }
       }
       
