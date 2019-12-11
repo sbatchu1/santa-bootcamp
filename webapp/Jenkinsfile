@@ -6,28 +6,33 @@ pipeline {
      ORGANIZATION_NAME="sbatchu1/santa-bootcamp"
      // YOUR_DOCKERHUB_USERNAME (it doesn't matter if you don't have one)
      
-     SERVICE_NAME = "webapp"
-     REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
+    //  SERVICE_NAME = "webapp"
+    //  REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
+
+     REPOSITORY_ADDRESS = '580572941932.dkr.ecr.ap-south-1.amazonaws.com'
+     CONTAINER_IMAGE = 'santa/webapp'
    }
 
    stages {
-      stage('Preparation') {
+
+      stage('Prepare') {
          steps {
-            cleanWs()
-            git credentialsId: 'GitHub', url: "https://github.com/${ORGANIZATION_NAME}/${SERVICE_NAME}"
-         }
-      }
-      stage('Build') {
-         steps {
-            sh 'echo No build required for Webapp.'
+             dir('webapp'){
+                sh '$(aws ecr get-login --no-include-email --region ap-south-1)'
+             }
+           
          }
       }
 
-      stage('Build and Push Image') {
+      stage('Build Image') {
          steps {
-           sh 'docker image build -t ${REPOSITORY_TAG} .'
+           sh "docker build\
+              --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+              --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+              --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:${BUILD_ID} ."
          }
       }
+      
 
       stage('Deploy to Cluster') {
           steps {
