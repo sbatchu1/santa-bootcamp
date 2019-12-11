@@ -50,8 +50,8 @@ pipeline {
           steps {
             dir('webapp'){
                 sh "aws eks --region ap-south-1 update-kubeconfig --name $K8S_NAME"
-                sh 'kubectl cluster-info dump'
-                sh 'kubectl get nodes'
+                sh 'sudo kubectl cluster-info dump'
+                sh 'sudo kubectl get nodes'
                 sh 'kubectl apply -f deploy.yaml'
             }
           }
