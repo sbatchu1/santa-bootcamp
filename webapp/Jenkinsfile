@@ -13,18 +13,22 @@ pipeline {
 
         stage('Docker Build Webapp') {
             steps {
-                sh "docker pull $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest || true"
-                sh "docker build\
-                --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
-                --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
-                --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:`git rev-parse HEAD` ."
+                sh "make ."
+                // sh "docker pull $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest || true"
+                // sh "docker build\
+                // --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+                // --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
+                // --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:`git rev-parse HEAD` ."
             }
         }
 
         stage('Publish') {
             steps {
-                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest"
-                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:`git rev-parse HEAD`"
+                sh "docker push $REPOSITORY_ADDRESS/api-gateway"
+                sh "docker push $REPOSITORY_ADDRESS/position-simulator"
+                sh "docker push $REPOSITORY_ADDRESS/position-tracker"
+                sh "docker push $REPOSITORY_ADDRESS/queue"
+                sh "docker push $REPOSITORY_ADDRESS/webapp"
             }
         }
 
