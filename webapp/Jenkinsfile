@@ -1,39 +1,38 @@
-REPOSITORY_ADDRESS = '580572941932.dkr.ecr.ap-south-1.amazonaws.com/santa'
-CONTAINER_IMAGE = 'santa-fleet-webapp'
-ACCOUNT_ID = '580572941932'
 pipeline {
    agent any
 
-    stages {
-        stage('Prepare') {
-            steps {
-                sh "\$(aws ecr get-login --no-include-email --region ap-south-1 --registry-ids $ACCOUNT_ID)"
-            }
-        }
+   environment {
+     // You must set the following environment variables
+     // ORGANIZATION_NAME
+     // YOUR_DOCKERHUB_USERNAME (it doesn't matter if you don't have one)
+     
+     SERVICE_NAME = "fleetman-webapp"
+     REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
+   }
 
-        stage('Docker Build Webapp') {
-            steps {
-                sh "docker pull $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest || true"
-                sh "docker build\
-                --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
-                --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
-                --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:`git rev-parse HEAD` ."
-            }
-        }
+   stages {
+      stage('Preparation') {
+         steps {
+            cleanWs()
+            git credentialsId: 'GitHub', url: "https://github.com/${ORGANIZATION_NAME}/${SERVICE_NAME}"
+         }
+      }
+      stage('Build') {
+         steps {
+            sh 'echo No build required for Webapp.'
+         }
+      }
 
-        stage('Publish') {
-            steps {
-                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest"
-                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:`git rev-parse HEAD`"
-            }
-        }
+      stage('Build and Push Image') {
+         steps {
+           sh 'docker image build -t ${REPOSITORY_TAG} .'
+         }
+      }
 
-        stage('Deploy Webapp') {
-            steps {
-                sh """
-                    kubectl apply --filename k8s/
-                """
-            }
-        }
-    }
+      stage('Deploy to Cluster') {
+          steps {
+            sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
+          }
+      }
+   }
 }
