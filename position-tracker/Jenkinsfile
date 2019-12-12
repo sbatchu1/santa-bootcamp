@@ -40,7 +40,6 @@ pipeline {
     stage('Publish') {
         steps {
             dir(APP_NAME){
-                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest"
                 sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:${BUILD_ID}"
             }
         }
