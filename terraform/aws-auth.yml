@@ -1,0 +1,19 @@
+apiVersion: v1
+data:
+  mapAccounts: |
+    []
+  mapRoles: |+
+    - rolearn: arn:aws:iam::580572941932:role/santa-eks-u7Gvgv9k20191211062753353700000009
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+
+
+  mapUsers: |
+    []
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: aws-auth
+  selfLink: /api/v1/namespaces/kube-system/configmaps/aws-auth
