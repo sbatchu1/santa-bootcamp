@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: queue
-        image: "580572941932.dkr.ecr.ap-south-1.amazonaws.com/santa/queue:45"
+        image: "580572941932.dkr.ecr.ap-south-1.amazonaws.com/santa/queue:BUILD_ID"
         imagePullPolicy: Always
 ---
 apiVersion: v1

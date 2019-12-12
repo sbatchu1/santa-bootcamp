@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: position-simulator
+  namespace: santa
 spec:
   selector:
     matchLabels:
@@ -14,10 +15,10 @@ spec:
     spec:
       containers:
       - name: position-simulator
-        image: position-simulator
+        image: "580572941932.dkr.ecr.ap-south-1.amazonaws.com/santa/position-simulator:BUILD_ID"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: production-microservice
-        imagePullPolicy: Never
+        imagePullPolicy: Always
 ---
 # No service for this microservice - it's "headless", it just sends out data and nothing calls it.
