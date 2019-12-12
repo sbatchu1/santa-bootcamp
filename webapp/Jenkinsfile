@@ -52,6 +52,7 @@ pipeline {
                 sh "aws eks --region ap-south-1 update-kubeconfig --name $K8S_NAME"
                 sh 'sudo kubectl get nodes'
                 sh 'sudo kubectl apply -f deploy.yaml'
+                sh 'sudo kubectl get svc --namespace santa  webapp'
             }
           }
       }
