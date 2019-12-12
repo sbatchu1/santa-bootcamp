@@ -18,7 +18,8 @@ spec:
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: production-microservice
-        image: webapp
+        image: santa/webapp
+        image: "580572941932.dkr.ecr.ap-south-1.amazonaws.co/santa/webapp:BUILD_ID"
         imagePullPolicy: Always
         readinessProbe:
           httpGet:
