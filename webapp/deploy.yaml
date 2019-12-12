@@ -40,6 +40,7 @@ spec:
   ports:
     - name: http
       port: 80
-      nodePort: 30080
+      protocol: TCP
+      targetPort: 8080
 
-  type: NodePort
+  type: Loadbalancer
