@@ -39,7 +39,6 @@ pipeline {
     stage('Publish') {
         steps {
             dir('webapp'){
-                sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest"
                 sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:${BUILD_ID}"
             }
         }
