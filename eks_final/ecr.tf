@@ -1,3 +1,12 @@
+terraform {
+  backend "s3" {
+    bucket  = "santa-s3-bucket"
+    key     = "santa-ecr-state.tfstate"
+    region  = "ap-south-1"
+    profile = "ShellPowerUser"
+  }
+}
+
 
 provider "aws" {
   version = ">= 2.28.1"

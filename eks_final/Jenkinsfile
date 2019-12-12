@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Terraform Init') {
             steps {
-                dir('terraform'){
+                dir('eks_final'){
                     sh 'terraform init -no-color'
                 }
             }
@@ -12,7 +12,7 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                dir('terraform'){
+                dir('eks_final'){
                     sh 'terraform plan -out terraform.plan'
                 }
             }
@@ -20,7 +20,7 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                dir('terraform'){
+                dir('eks_final'){
                     sh 'terraform apply -auto-approve terraform.plan'
                 }
             }
