@@ -12,13 +12,14 @@ pipeline {
      REPOSITORY_ADDRESS = '580572941932.dkr.ecr.ap-south-1.amazonaws.com'
      CONTAINER_IMAGE = 'santa/queue'
      K8S_NAME="santa-eks-u7Gvgv9k"
+     APP_NAME = 'queue' 
    }
 
    stages {
 
       stage('Prepare') {
          steps {
-             dir('webapp'){
+             dir("${APP_NAME}"){
                 sh '$(aws ecr get-login --no-include-email --region ap-south-1)'
              }
            
@@ -27,7 +28,7 @@ pipeline {
 
       stage('Build Image') {
          steps {
-             dir('webapp'){
+             dir(APP_NAME){
                 sh "docker build\
                     --cache-from $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
                     --tag $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest\
@@ -38,7 +39,7 @@ pipeline {
 
     stage('Publish') {
         steps {
-            dir('webapp'){
+            dir(APP_NAME){
                 sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:latest"
                 sh "docker push $REPOSITORY_ADDRESS/$CONTAINER_IMAGE:${BUILD_ID}"
             }
@@ -48,8 +49,9 @@ pipeline {
 
       stage('Deploy to Cluster') {
           steps {
-            dir('webapp'){
+            dir(APP_NAME){
                 sh "aws eks --region ap-south-1 update-kubeconfig --name $K8S_NAME"
+                sh 'sed -i "s/BUILD_ID/${BUILD_ID}/g" deploy.yaml'
                 sh 'kubectl apply -f deploy.yaml'
             }
           }
