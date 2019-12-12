@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: queue
+  namespace: santa
 spec:
   selector:
     matchLabels:
@@ -14,14 +15,14 @@ spec:
     spec:
       containers:
       - name: queue
-        image: queue
-        imagePullPolicy: Never
+        image: "580572941932.dkr.ecr.ap-south-1.amazonaws.com/santa/queue:45"
+        imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: fleetman-queue
-
+  namespace: santa
 spec:
   # This defines which pods are going to be represented by this Service
   # The service becomes a network endpoint for either other services
