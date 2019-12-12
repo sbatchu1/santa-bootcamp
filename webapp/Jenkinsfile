@@ -50,8 +50,7 @@ pipeline {
           steps {
             dir('webapp'){
                 sh "aws eks --region ap-south-1 update-kubeconfig --name $K8S_NAME"
-                sh 'sudo kubectl get nodes'
-                sh 'sed -i "s/BUILD_ID/`${BUILD_ID}`/g" deploy.yaml'
+                sh 'sed -i "s/BUILD_ID/${BUILD_ID}/g" deploy.yaml'
                 sh 'sudo kubectl apply -f deploy.yaml'
                 sh 'sudo kubectl get svc --namespace santa  fleetman-webapp'
             }
