@@ -8,7 +8,7 @@ pipeline {
 
       stage('Deploy to Cluster') {
           steps {
-              dir('webapp'){
+              dir('mongodb'){
                 // withKubeConfig(contextName: 'default', credentialsId: '9a91910b-c106-47bc-bc12-757dfd2ad6a2', namespace: 'default', serverUrl: '${KUBERNETES_API_SERVER}') {
                     sh "aws eks --region ap-south-1 update-kubeconfig --name $K8S_NAME"
                     sh 'sudo kubectl apply -f deploy.yaml'
